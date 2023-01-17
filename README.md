@@ -74,4 +74,35 @@ python task.py
 6. Where and how will your application run? 
    - The application can run locally mentioned above and can be stopped using ctrl+C
 
+# QUESTIONS
 
+1. How would you deploy this application in production?
+   - Create AWS SQS Queue
+   - Create Postgress Database in AWS or any other service
+   - Packaging the application as a Docker Container and Publish it in registry
+   - Create a ECS service and then connect it with SQS Queue and Postfres database
+
+2. What other components would you want to add to make this production ready?
+   - More Error Handling and testing - I caught few bad values in the localstack
+   - Implement a Monitor service such as cloudwatch
+   - Create Automated backups
+   - Make everything more secured using IAM roles
+
+3. How can this application scale with a growing dataset?
+   - Using a loadbalancer to create multiple instance of the application.
+   - Create a Cloudwatch log to keep an eye on performace
+   - Use of auto scaling groups in case the load is increased on the application.
+   - Can also use various Data Warehousing solutions available such as AWS Redshift.
+
+4. How can PII be recovered later on?
+   - One way is by using the hashed values of the PII data as a reference, and comparing it to the original data that was hashed.This is done by applying the same hash function to the original data, and comparing the output to the stored hashed value. If the two values match, it is likely that the original data was used to generate the hashed value.
+   -  However,is not foolproof, as hash collisions can occur. Therefore, it is also important to store the original data in a secure, encrypted location, in case it is needed for recovery.
+
+5. What are the assumptions you made?
+   - SQS queue and PostfreSQL are running on localhost and can be accessed using AWS CLI calls and Postgre server already exists with all the specified data columns.
+   - Also SQS Message has to be deleted after it is once read and stored in the SQL Database.
+   - Had to make one change in SQL data type of "app_version" from specified int to a string(9). As the version of applications can be '2.5.0' which is not a float nor an integer and to preserve the standard format the Table data type of app version had to be changed to string.
+  
+  
+   - 
+● 
