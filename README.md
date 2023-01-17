@@ -61,7 +61,8 @@ python task.py
 # Solution Development Decesions 
 1. How will you read messages from the queue?
    - I initialy tried using boto3 but it was throwing me error that I require AWS Credentials.
-  So I searched online the subprocess of python where I wrote response code using AWS-CLI.
+  So I searched online the subprocess of python where I wrote response code as a form of AWS-CLI.
+example - `awslocal sqs receive-message --queue-url http://localhost:4566/000000000000/login-queue`
   
 2. How will you mask the PII data so that duplicate values can be identified?
    - I used sha256 funtion of hashlib library to do the following.
