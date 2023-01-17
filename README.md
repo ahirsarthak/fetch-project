@@ -106,6 +106,8 @@ example - `awslocal sqs receive-message --queue-url http://localhost:4566/000000
    - Assumed that SQS queue are in the correct sequence and format and it can be accessed as it is using the AWS-CLI
    - Also SQS Message has to be deleted after it is once read and stored in the SQL Database.
    - Had to make one change in SQL data type of "app_version" from given int to a char(9). As the version of applications can be '2.5.0' which is not a float nor an integer and to preserve the standard format the Table data type of app version had to be changed to string.
+   - Couldn't use boto3 as it required AWS region and AWS Credentials.
+ 
   
   
  
