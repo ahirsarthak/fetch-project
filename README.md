@@ -58,6 +58,8 @@ docker-compose down
 ```bash
 python task.py
 ```
+and CTRL + C to end the process of ETL
+
 # Solution Development Decesions 
 1. How will you read messages from the queue?
    - I initialy tried using boto3 but it was throwing me error that I require AWS Credentials.
