@@ -99,10 +99,10 @@ python task.py
    -  However,is not foolproof, as hash collisions can occur. Therefore, it is also important to store the original data in a secure, encrypted location, in case it is needed for recovery.
 
 5. What are the assumptions you made?
-   - SQS queue and PostfreSQL are running on localhost and can be accessed using AWS CLI calls and Postgre server already exists with all the specified data columns.
+   - SQS queue and PostfreSQL are running on localhost and can be accessed using AWS CLI calls and Postgre server already exists with all the specified table with data columns.
+   - Assumed that SQS queue are in the correct sequence and format and it can be accessed as it is using the AWS-CLI
    - Also SQS Message has to be deleted after it is once read and stored in the SQL Database.
-   - Had to make one change in SQL data type of "app_version" from specified int to a string(9). As the version of applications can be '2.5.0' which is not a float nor an integer and to preserve the standard format the Table data type of app version had to be changed to string.
+   - Had to make one change in SQL data type of "app_version" from given int to a string(9). As the version of applications can be '2.5.0' which is not a float nor an integer and to preserve the standard format the Table data type of app version had to be changed to string.
   
   
-   - 
-● 
+ 
