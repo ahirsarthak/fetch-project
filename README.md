@@ -60,18 +60,18 @@ python task.py
 ```
 # Solution Development Decesions 
 1. How will you read messages from the queue?
-  I initialy tried using boto3 but it was throwing me error that I require AWS Credentials.
+   -I initialy tried using boto3 but it was throwing me error that I require AWS Credentials.
   So I searched online the subprocess of python where I wrote response code using AWS-CLI.
   
 2. How will you mask the PII data so that duplicate values can be identified?
-   I used sha256 funtion of hashlib library to do the following.
+    -I used sha256 funtion of hashlib library to do the following.
    And it also takes care of detecting the duplicate values as it produces same hash if same input is given so if the hash value is same then the value is a duplicate
    
 3. What will be your strategy for connecting and writing to Postgres?
-   For connection I used psycopg2.
+    -For connection I used psycopg2.
    It has set of inbuilt python funtions to connect with psql databse '.connect' and write into it '.execute'
    
 6. Where and how will your application run? 
-   The application can run locally mentioned above and can be stopped using ctrl+C
+    -The application can run locally mentioned above and can be stopped using ctrl+C
 
 
