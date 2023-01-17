@@ -48,7 +48,7 @@ pip install awscli-local
 ```bash
 docker-compose up
 ```
-and to shut it down CTRL + C or
+and Once you're done with everything to shut it down CTRL + C or
 ```
 docker-compose down 
 ```
