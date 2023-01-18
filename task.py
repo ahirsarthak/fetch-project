@@ -1,7 +1,7 @@
 import subprocess
 import json
 import time
-#import boto3
+# import boto3
 import psycopg2
 from datetime import datetime
 from hashlib import sha256
@@ -14,8 +14,9 @@ queue_url = 'http://localhost:4566/000000000000/login-queue'
 
 def mask_pii(data):
     try:
-    # Hash device_id and ip using sha256
-        data['masked_device_id'] = sha256(data['device_id'].encode()).hexdigest()
+        # Hash device_id and ip using sha256
+        data['masked_device_id'] = sha256(
+            data['device_id'].encode()).hexdigest()
         data['masked_ip'] = sha256(data['ip'].encode()).hexdigest()
         return data
     except Exception as e:
@@ -42,7 +43,8 @@ def current_date():
 def write_to_db(data):
     try:
         cur = conn.cursor()
-        cur.execute("INSERT INTO user_logins(user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date) VALUES(%s, %s, %s, %s, %s, %s, %s)",(data['user_id'], data['device_type'], data['masked_ip'], data['masked_device_id'], data['locale'], data['app_version'], current_date()))
+        cur.execute("INSERT INTO user_logins(user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date) VALUES(%s, %s, %s, %s, %s, %s, %s)",
+                    (data['user_id'], data['device_type'], data['masked_ip'], data['masked_device_id'], data['locale'], data['app_version'], current_date()))
         conn.commit()
     except Exception as e:
         print(e)
@@ -50,10 +52,10 @@ def write_to_db(data):
 
 while True:
     try:
-    
+
         # Receive message from SQS queue
         response = subprocess.run(['awslocal', 'sqs', 'receive-message', '--queue-url',
-                               queue_url], capture_output=True)
+                                   queue_url], capture_output=True)
         if response.returncode == 0:
             # Extract the message body
             message_body = json.loads(response.stdout)
@@ -61,27 +63,25 @@ while True:
             receipt_handle = message_body['Messages'][0]['ReceiptHandle']
 
             data = json.loads(message_body['Messages'][0]['Body'])
-            print(data)
+            # print(data)
 
             subprocess.run(['awslocal', 'sqs', 'delete-message', '--queue-url',
-                       queue_url, '--receipt-handle', receipt_handle], capture_output=True)
-            
+                            queue_url, '--receipt-handle', receipt_handle], capture_output=True)
+
             # IF there is invalid / unwanted message in Queue to ignore and remove it
             if data.get('user_id') == None:
                 continue
-            
+
             data = mask_pii(data)
             data["app_version"] = str(data["app_version"])
             write_to_db(data)
             # print(data)
-            print("Process End")
+            # print("Process End")
 
         else:
             print(response.stderr)
         # time.sleep(5)
     except Exception as e:
         print(e)
-
-    finally:
-        print("ETL Process Complete")
+        print("Process ended")
         break
