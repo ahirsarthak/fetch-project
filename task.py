@@ -1,7 +1,7 @@
 import subprocess
 import json
 import time
-import boto3
+#import boto3
 import psycopg2
 from datetime import datetime
 from hashlib import sha256
@@ -37,6 +37,7 @@ def current_date():
 
 
 def write_to_db(data):
+    
     cur = conn.cursor()
     cur.execute("INSERT INTO user_logins(user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date) VALUES(%s, %s, %s, %s, %s, %s, %s)",
                 (data['user_id'], data['device_type'], data['masked_ip'], data['masked_device_id'], data['locale'], data['app_version'], current_date()))
@@ -54,6 +55,7 @@ while True:
         receipt_handle = message_body['Messages'][0]['ReceiptHandle']
 
         data = json.loads(message_body['Messages'][0]['Body'])
+        print(data)
 
         subprocess.run(['awslocal', 'sqs', 'delete-message', '--queue-url',
                         queue_url, '--receipt-handle', receipt_handle], capture_output=True)
