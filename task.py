@@ -13,10 +13,13 @@ queue_url = 'http://localhost:4566/000000000000/login-queue'
 
 
 def mask_pii(data):
+    try:
     # Hash device_id and ip using sha256
-    data['masked_device_id'] = sha256(data['device_id'].encode()).hexdigest()
-    data['masked_ip'] = sha256(data['ip'].encode()).hexdigest()
-    return data
+        data['masked_device_id'] = sha256(data['device_id'].encode()).hexdigest()
+        data['masked_ip'] = sha256(data['ip'].encode()).hexdigest()
+        return data
+    except Exception as e:
+        print(e)
 
 
 # Connect to Postgres DB
@@ -37,14 +40,16 @@ def current_date():
 
 
 def write_to_db(data):
-    
-    cur = conn.cursor()
-    cur.execute("INSERT INTO user_logins(user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date) VALUES(%s, %s, %s, %s, %s, %s, %s)",
-                (data['user_id'], data['device_type'], data['masked_ip'], data['masked_device_id'], data['locale'], data['app_version'], current_date()))
-    conn.commit()
+    try:
+        cur = conn.cursor()
+        cur.execute("INSERT INTO user_logins(user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date) VALUES(%s, %s, %s, %s, %s, %s, %s)",(data['user_id'], data['device_type'], data['masked_ip'], data['masked_device_id'], data['locale'], data['app_version'], current_date()))
+        conn.commit()
+    except Exception as e:
+        print(e)
 
 
 while True:
+    
     # Receive message from SQS queue
     response = subprocess.run(['awslocal', 'sqs', 'receive-message', '--queue-url',
                                queue_url], capture_output=True)
